@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuthStore } from '@/stores/useAuthStore';
 
 export default function LoginPage() {
@@ -30,10 +30,6 @@ export default function LoginPage() {
       });
 
       if (success) {
-        console.log('Login realizado com sucesso!');
-        // Get user from store to check roles immediately? 
-        // Note: getState() is available on the store object if imported as store, but here we use hook.
-        // However, we just updated the store. useAuthStore.getState() is safe way to get fresh state.
         
         const user = useAuthStore.getState().user;
         
