@@ -16,6 +16,7 @@ import TurmaChartCard from './TurmaChartCard';
 
 interface AtividadesChartProps {
   turmaId?: number;
+  minimal?: boolean;
 }
 
 interface TurmaComCampos {
@@ -31,7 +32,7 @@ interface TurmaComCampos {
 
 const COLORS = CHART_COLORS;
 
-export default function AtividadesChart({ turmaId }: AtividadesChartProps) {
+export default function AtividadesChart({ turmaId, minimal = false }: AtividadesChartProps) {
   const relatorio = useCamposStore((state) => state.relatorio);
   const isLoading = useCamposStore((state) => state.isLoading);
   const error = useCamposStore((state) => state.error);
@@ -84,14 +85,16 @@ export default function AtividadesChart({ turmaId }: AtividadesChartProps) {
   if (isLoading && !relatorio) {
     return (
       <div className="space-y-3 sm:space-y-4 w-full">
-        <div className="rounded-lg bg-white p-3 sm:p-6 shadow animate-pulse">
-          <div className="h-5 sm:h-6 bg-gray-200 rounded w-1/3 mb-3 sm:mb-4"></div>
-          <div className="space-y-2 sm:space-y-3">
-            <div className="h-3 sm:h-4 bg-gray-200 rounded w-full"></div>
-            <div className="h-3 sm:h-4 bg-gray-200 rounded w-full"></div>
-            <div className="h-3 sm:h-4 bg-gray-200 rounded w-2/3"></div>
-          </div>
-        </div>
+        {!minimal && (
+            <div className="rounded-lg bg-white p-3 sm:p-6 shadow animate-pulse">
+              <div className="h-5 sm:h-6 bg-gray-200 rounded w-1/3 mb-3 sm:mb-4"></div>
+              <div className="space-y-2 sm:space-y-3">
+                <div className="h-3 sm:h-4 bg-gray-200 rounded w-full"></div>
+                <div className="h-3 sm:h-4 bg-gray-200 rounded w-full"></div>
+                <div className="h-3 sm:h-4 bg-gray-200 rounded w-2/3"></div>
+              </div>
+            </div>
+        )}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
           {[1, 2, 3].map((i) => (
             <div key={i} className="rounded-lg bg-white p-3 sm:p-4 shadow animate-pulse">
@@ -126,20 +129,22 @@ export default function AtividadesChart({ turmaId }: AtividadesChartProps) {
 
   return (
     <div className="space-y-4 sm:space-y-6 w-full">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-        <div className="rounded-lg bg-blue-50 border border-blue-200 p-3 sm:p-4">
-          <p className="text-xs sm:text-sm font-medium text-blue-700">Total de Atividades</p>
-          <p className="text-xl sm:text-2xl font-bold text-blue-900 mt-1 sm:mt-2">{totalAtividades}</p>
+      {!minimal && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+            <div className="rounded-lg bg-blue-50 border border-blue-200 p-3 sm:p-4">
+            <p className="text-xs sm:text-sm font-medium text-blue-700">Total de Atividades</p>
+            <p className="text-xl sm:text-2xl font-bold text-blue-900 mt-1 sm:mt-2">{totalAtividades}</p>
+            </div>
+            <div className="rounded-lg bg-green-50 border border-green-200 p-3 sm:p-4">
+            <p className="text-xs sm:text-sm font-medium text-green-700">Campos de Experiência</p>
+            <p className="text-xl sm:text-2xl font-bold text-green-900 mt-1 sm:mt-2">{relatorio.resumo.totalCampos}</p>
+            </div>
+            <div className="rounded-lg bg-purple-50 border border-purple-200 p-3 sm:p-4">
+            <p className="text-xs sm:text-sm font-medium text-purple-700">Turmas</p>
+            <p className="text-xl sm:text-2xl font-bold text-purple-900 mt-1 sm:mt-2">{turmasComCampos.length}</p>
+            </div>
         </div>
-        <div className="rounded-lg bg-green-50 border border-green-200 p-3 sm:p-4">
-          <p className="text-xs sm:text-sm font-medium text-green-700">Campos de Experiência</p>
-          <p className="text-xl sm:text-2xl font-bold text-green-900 mt-1 sm:mt-2">{relatorio.resumo.totalCampos}</p>
-        </div>
-        <div className="rounded-lg bg-purple-50 border border-purple-200 p-3 sm:p-4">
-          <p className="text-xs sm:text-sm font-medium text-purple-700">Turmas</p>
-          <p className="text-xl sm:text-2xl font-bold text-purple-900 mt-1 sm:mt-2">{turmasComCampos.length}</p>
-        </div>
-      </div>
+      )}
 
       <div className="rounded-lg bg-white p-3 sm:p-6 shadow">
         <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4 text-gray-900">Total de Atividades por Campo de Experiência</h3>
@@ -196,7 +201,7 @@ export default function AtividadesChart({ turmaId }: AtividadesChartProps) {
         </div>
       </div>
 
-      {turmasComCampos.map((turma, turmaIndex) => (
+      {!minimal && turmasComCampos.map((turma, turmaIndex) => (
         <TurmaChartCard 
             key={turma.turmaId}
             turma={turma}
